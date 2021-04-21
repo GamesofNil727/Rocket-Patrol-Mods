@@ -98,6 +98,22 @@ class Play extends Phaser.Scene {
                 this.sound.play('sfx_select');
             }, null, this);
         }
+
+        // display timer
+        let timerConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#ED973B',
+            color: '#692A03',
+            align: 'left',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
+        this.timerRight = this.add.text(game.config.width - (borderUISize + borderPadding + timerConfig.fixedWidth),
+        borderUISize + (borderPadding * 2), Math.floor(this.clock.getRemainingSeconds()), timerConfig);
     }
 
     update() {
@@ -135,6 +151,9 @@ class Play extends Phaser.Scene {
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
         }
+
+        // update timer
+        this.timerRight.setText(Math.floor(this.clock.getRemainingSeconds()));
     }
 
     checkCollision(rocket, ship) {

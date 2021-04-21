@@ -8,7 +8,13 @@
  * Implement parallax scrolling (10)
  * Create a new ANIMATED sprite for the Spaceship enemies (10)
  * Create new artwork for all of the in-game assets (rocket, spaceships, explosion) (20)
- * Total: 5+10+10?+20+
+ * Implement the speed increase that happens after 30 seconds in the original game (5)
+ * Allow the player to control the Rocket after it's fired (5)
+ * Display the time remaining (in seconds) on the screen (10)
+ * Total: 5+10+10?+20+5+5+10+
+ * 
+ * Sources:
+ * Phaser post (for help with displaying timer): https://phaser.discourse.group/t/countdown-timer/2471
  */
 
 let config = {
