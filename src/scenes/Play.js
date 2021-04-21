@@ -22,11 +22,6 @@ class Play extends Phaser.Scene {
 
         // more of a turquoise UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x30D5C8).setOrigin(0, 0);
-        // white borders
-        //this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
-        //this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
-        //this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
-        //this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
 
         // add rocket (p1)
         this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - 12, 'rocket').setOrigin(0.5, 0);
@@ -93,6 +88,16 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width / 2, (game.config.height / 2) + 64, '(R)estart or ← for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
+
+        // 30-second clock to increase speed
+        if (game.settings.gameTimer == 60000) {
+            this.clock2 = this.time.delayedCall(30000, () => {
+                this.ship01.moveSpeed = 4;
+                this.ship02.moveSpeed = 4;
+                this.ship03.moveSpeed = 4;
+                this.sound.play('sfx_select');
+            }, null, this);
+        }
     }
 
     update() {
