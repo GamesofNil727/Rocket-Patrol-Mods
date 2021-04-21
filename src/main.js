@@ -1,3 +1,16 @@
+/* Ethan Chen
+ * Rocket Patrol Mods
+ * 4/19/21
+ * Completion time:
+ *
+ * Points breakdown:
+ * Create a new scrolling tile sprite for the background (5)
+ * Implement parallax scrolling (10)
+ * Create a new ANIMATED sprite for the Spaceship enemies (10)
+ * Create new artwork for all of the in-game assets (rocket, spaceships, explosion) (20)
+ * Total: 5+10+10?+20+
+ */
+
 let config = {
     type: Phaser.CANVAS,
     width: 640,
