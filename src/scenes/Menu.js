@@ -26,7 +26,7 @@ class Menu extends Phaser.Scene {
         }
 
         // show menu text
-        this.add.text(game.config.width / 2, (game.config.height / 2) - borderUISize - borderPadding, 'ROCKET PATROL (?)', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width / 2, (game.config.height / 2) - borderUISize - borderPadding, 'ROCKET PATROL++', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width / 2, game.config.height / 2, 'Use ←→ arrows to move & (F) to blast', menuConfig).setOrigin(0.5);
         menuConfig.backgroundColor = '#FF4400';
         menuConfig.color = '#570C00';
@@ -42,6 +42,7 @@ class Menu extends Phaser.Scene {
             // easy mode
             game.settings = {
                 spaceshipSpeed: 3,
+                droneshipSpeed: 7,
                 gameTimer: 60000
             }
             this.sound.play('sfx_select');
@@ -51,6 +52,7 @@ class Menu extends Phaser.Scene {
             // hard mode
             game.settings = {
                 spaceshipSpeed: 4,
+                droneshipSpeed: 9,
                 gameTimer: 45000
             }
             this.sound.play('sfx_select');

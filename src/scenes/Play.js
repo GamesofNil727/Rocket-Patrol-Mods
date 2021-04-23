@@ -11,7 +11,9 @@ class Play extends Phaser.Scene {
 
         // load spritesheet
         this.load.spritesheet('spaceship', 'assets/spaceship.png', {frameWidth: 63, frameHeight: 32, startFrame: 0, endFrame: 3});
+        this.load.spritesheet('droneship', 'assets/droneship.png', {frameWidth: 31, frameHeight: 16, startFrame: 0, endFrame: 3});
         this.load.spritesheet('explosion', 'assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
+        this.load.spritesheet('dronesplosion', 'assets/dronesplosion.png', {frameWidth: 31, frameHeight: 16, startFrame: 0, endFrame: 9});
     }
 
     create() {
@@ -30,6 +32,9 @@ class Play extends Phaser.Scene {
         this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 4, 'spaceship', 0, 30).setOrigin(0, 0);
         this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, (borderUISize * 5) + (borderPadding * 2), 'spaceship', 0, 20).setOrigin(0, 0);
         this.ship03 = new Spaceship(this, game.config.width, (borderUISize * 6) + (borderPadding * 4), 'spaceship', 0, 10).setOrigin(0, 0);
+
+        // add droneship
+        this.drone = new Droneship(this, 0 - (borderUISize * 3), (borderUISize * 7) + (borderPadding * 8), 'droneship', 0, 50).setOrigin(0, 0);
 
         // white borders
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
@@ -50,8 +55,19 @@ class Play extends Phaser.Scene {
             frameRate: 30
         });
         this.anims.create({
+            key: 'dronesplode',
+            frames: this.anims.generateFrameNumbers('dronesplosion', { start: 0, end: 9, first: 0}),
+            frameRate: 30
+        });
+        this.anims.create({
             key: 'bigship',
             frames: this.anims.generateFrameNumbers('spaceship', { start: 0, end: 3, first: 0}),
+            frameRate: 7,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'miniship',
+            frames: this.anims.generateFrameNumbers('droneship', { start: 0, end: 3, first: 0}),
             frameRate: 7,
             repeat: -1
         });
@@ -59,6 +75,7 @@ class Play extends Phaser.Scene {
         this.ship01.anims.play('bigship');
         this.ship02.anims.play('bigship');
         this.ship03.anims.play('bigship');
+        this.drone.anims.play('miniship');
 
         // initialize score
         this.p1Score = 0;
@@ -95,6 +112,7 @@ class Play extends Phaser.Scene {
                 this.ship01.moveSpeed = 4;
                 this.ship02.moveSpeed = 4;
                 this.ship03.moveSpeed = 4;
+                this.drone.moveSpeed = 8;
                 this.sound.play('sfx_select');
             }, null, this);
         }
@@ -136,6 +154,7 @@ class Play extends Phaser.Scene {
             this.ship01.update();
             this.ship02.update();
             this.ship03.update();
+            this.drone.update();
         }
 
         // check collisions
@@ -150,6 +169,10 @@ class Play extends Phaser.Scene {
         if (this.checkCollision(this.p1Rocket, this.ship01)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
+        }
+        if (this.checkCollision(this.p1Rocket, this.drone)) {
+            this.p1Rocket.reset();
+            this.droneExplode(this.drone);
         }
 
         // update timer
@@ -181,6 +204,24 @@ class Play extends Phaser.Scene {
         });
         // score add and repaint
         this.p1Score += ship.points;
+        this.scoreLeft.text = this.p1Score;
+        // explode sfx
+        this.sound.play('sfx_explosion');
+    }
+
+    droneExplode(drone) {
+        // temporarily hide drone
+        drone.alpha = 0;
+        // create explosion sprite at drone's position
+        let boom2 = this.add.sprite(drone.x, drone.y, 'dronesplosion').setOrigin(0, 0);
+        boom2.anims.play('dronesplode');
+        boom2.on('animationcomplete', () => {
+            drone.reset();
+            drone.alpha = 1;
+            boom2.destroy();
+        });
+        // score add and repaint
+        this.p1Score += drone.points;
         this.scoreLeft.text = this.p1Score;
         // explode sfx
         this.sound.play('sfx_explosion');
