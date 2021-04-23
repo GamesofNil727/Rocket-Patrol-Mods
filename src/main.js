@@ -1,7 +1,7 @@
 /* Ethan Chen
  * Rocket Patrol Mods
  * 4/19/21
- * Completion time:
+ * Completion time: ~12 hours
  *
  * Points breakdown:
  * Create a new scrolling tile sprite for the background (5)
@@ -12,10 +12,13 @@
  * Allow the player to control the Rocket after it's fired (5)
  * Display the time remaining (in seconds) on the screen (10)
  * Create a new spaceship type (w/ new artwork) that's smaller, moves faster, and is worth more points (20)
- * Total: 5+10+10?+20+5+5+10+20+
+ * Implement a new timing/scoring mechanism that adds time to the clock for successful hits (20)
+ * Total: 5+10+10?+20+5+5+10+20+20 = 105
  * 
  * Sources:
  * Phaser post (for help with displaying timer): https://phaser.discourse.group/t/countdown-timer/2471
+ * Phaser documentation (further timer help, including adding time): https://photonstorm.github.io/phaser3-docs/Phaser.Time.TimerEvent.html
+ * Stack overflow that introduced me to setInterval() https://stackoverflow.com/questions/62725455/how-to-run-a-function-each-minute-in-phaser-3
  */
 
 let config = {

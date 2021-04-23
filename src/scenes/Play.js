@@ -1,3 +1,9 @@
+/* Ethan Chen
+ * Rocket Patrol Mods
+ * 4/19/21
+ * Completion time: ~12 hours
+ */
+
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
@@ -29,12 +35,12 @@ class Play extends Phaser.Scene {
         this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - 12, 'rocket').setOrigin(0.5, 0);
 
         // add spaceships (x3)
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 4, 'spaceship', 0, 30).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, (borderUISize * 5) + (borderPadding * 2), 'spaceship', 0, 20).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, game.config.width, (borderUISize * 6) + (borderPadding * 4), 'spaceship', 0, 10).setOrigin(0, 0);
+        this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, (borderUISize * 4.5) + (borderPadding * 2), 'spaceship', 0, 30).setOrigin(0, 0);
+        this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, (borderUISize * 5.5) + (borderPadding * 4), 'spaceship', 0, 20).setOrigin(0, 0);
+        this.ship03 = new Spaceship(this, game.config.width, (borderUISize * 6.5) + (borderPadding * 6), 'spaceship', 0, 10).setOrigin(0, 0);
 
         // add droneship
-        this.drone = new Droneship(this, 0 - (borderUISize * 3), (borderUISize * 7) + (borderPadding * 8), 'droneship', 0, 50).setOrigin(0, 0);
+        this.drone = new Droneship(this, 0 - (borderUISize * 3), borderUISize * 4, 'droneship', 0, 60).setOrigin(0, 0);
 
         // white borders
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
@@ -107,14 +113,14 @@ class Play extends Phaser.Scene {
         }, null, this);
 
         // 30-second clock to increase speed
-        if (game.settings.gameTimer == 60000) {
-            this.clock2 = this.time.delayedCall(30000, () => {
-                this.ship01.moveSpeed = 4;
-                this.ship02.moveSpeed = 4;
-                this.ship03.moveSpeed = 4;
-                this.drone.moveSpeed = 8;
-                this.sound.play('sfx_select');
-            }, null, this);
+        if (!this.gameOver) {
+            this.scaler = setInterval(() => {
+                this.ship01.moveSpeed += 1;
+                this.ship02.moveSpeed += 1;
+                this.ship03.moveSpeed += 1;
+                this.drone.moveSpeed += 2;
+                this.sound.play('sfx_speedup');
+            }, game.settings.gameTimer / 2);
         }
 
         // display timer
@@ -147,6 +153,11 @@ class Play extends Phaser.Scene {
             this.sound.play('sfx_select');
         }
 
+        // turn off interval when game is over
+        if (this.gameOver) {
+            clearInterval(this.scaler);
+        }
+
         this.starfield.tilePositionX -= 4;
         this.asteroids.tilePositionX -= 8;
         if (!this.gameOver) {
@@ -161,18 +172,22 @@ class Play extends Phaser.Scene {
         if (this.checkCollision(this.p1Rocket, this.ship03)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship03);
+            this.clock.elapsed -= 1000;
         }
         if (this.checkCollision(this.p1Rocket, this.ship02)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship02);
+            this.clock.elapsed -= 2000;
         }
         if (this.checkCollision(this.p1Rocket, this.ship01)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
+            this.clock.elapsed -= 3000;
         }
         if (this.checkCollision(this.p1Rocket, this.drone)) {
             this.p1Rocket.reset();
             this.droneExplode(this.drone);
+            this.clock.elapsed -= 6000;
         }
 
         // update timer
